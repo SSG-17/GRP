@@ -24,14 +24,9 @@ if (!file.exists('./stat/RUS_adm_shp.zip')){
 
 #распаковать архив
 unzip('./stat/RUS_adm_shp.zip', exdir = './stat/RUS_adm_shp')
-#список файлов
-dir('./stat/RUS_adm_shp')
 
 # прочитать данные уровня 1
 Regions <- readShapePoly('./stat/RUS_adm_shp/RUS_adm1.shp')
-
-# слот "данные"
-Regions@data
 
 df <- data.table(Regions@data)
 
@@ -73,13 +68,7 @@ Regions@data <- merge(Regions@data, stat.Region,
 # задаём палитру-градиент
 mypalette <- colorRampPalette(c('white', 'navyblue'))
 
-# строим картограмму ВРП
-spplot(Regions, 'GVP',
-       col.regions = mypalette(20),
-       col = 'black',
-       par.settings = list(axis.line = list(col = NA)))
-
-# то же - с названиями областей
+# строим картограмму ВРП с названиями областей
 spplot(Regions, 'GVP',
        col.regions = mypalette(20),
        col = 'black',
@@ -88,17 +77,10 @@ spplot(Regions, 'GVP',
          panel.polygonsplot(x, y, z, subscripts, ...)
          sp.text(coordinates(Regions),
                  Regions$NAME_1[subscripts], cex = 0.3)
-       } )
+       }, xlim = c(0,180))
 
 #вторая карта
-# строим картограмму ВРП на душу населения
-spplot(Regions, 'GVP.D',
-       col.regions = mypalette(20),
-       col = 'black',
-       par.settings = list(axis.line = list(col = NA)))
-
-
-# то же - с названиями областей
+# строим картограмму ВРП на душу населения с названиями областей
 spplot(Regions, 'GVP.D',
        col.regions = mypalette(20),
        col = 'black',
@@ -107,4 +89,4 @@ spplot(Regions, 'GVP.D',
          panel.polygonsplot(x, y, z, subscripts, ...)
          sp.text(coordinates(Regions),
                  Regions$NAME_1[subscripts], cex = 0.3)
-       })
+       }, xlim = c(0,180))
